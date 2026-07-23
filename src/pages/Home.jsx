@@ -11,6 +11,13 @@ import {
   Code2,
   Users,
   ChevronDown,
+  Sparkles,
+  Activity,
+  Network,
+  TrendingUp,
+  TrendingDown,
+  BarChart2,
+  FileText,
 } from "lucide-react";
 import Navbar from "../components/layout/Navbar";
 import MobileTabBar from "../components/layout/MobileTabBar";
@@ -19,57 +26,115 @@ import MobileTabBar from "../components/layout/MobileTabBar";
 /*  Static content                                                            */
 /* -------------------------------------------------------------------------- */
 
-const HERO_STATS = [
-  { value: "12.4ms", label: "Latency" },
-  { value: "1.84", label: "Sharpe Ratio" },
-  { value: "99.8%", label: "Val Validation" },
-  { value: "450+", label: "Factors" },
+const WORKFLOW_STEPS = [
+  {
+    num: "01",
+    title: "Define",
+    tag: "Parameter Inputs",
+    desc: "Hypothesis formulation and factor selection based on market anomalies.",
+  },
+  {
+    num: "02",
+    title: "Research",
+    tag: "Backtest Execution",
+    desc: "Data ingestion and cross-asset correlation mapping.",
+  },
+  {
+    num: "03",
+    title: "Analyze",
+    tag: "Equity Metrics",
+    desc: "Factor attribution and backtesting on high-fidelity tick data.",
+  },
+  {
+    num: "04",
+    title: "Validate",
+    tag: "Statistical Tests",
+    desc: "Out-of-sample testing and Monte Carlo stress simulations.",
+  },
+  {
+    num: "05",
+    title: "Evaluate ML",
+    tag: "Signal Quality",
+    desc: "Hyper-parameter tuning and ensemble model training.",
+  },
+  {
+    num: "06",
+    title: "Filter",
+    tag: "Alpha Selection",
+    desc: "Neural alpha filtering to reduce drawdown and volatility noise.",
+    active: true,
+  },
 ];
 
-const ARCHITECTURE_CARDS = [
+const CAPABILITIES = [
   {
     icon: LineChart,
-    tag: "Real-Time",
-    title: "Strategic Analysis",
-    desc: "Vectorized backtesting engine capable of processing 10-year historical data across 500+ assets in seconds.",
-    span: "md:col-span-1",
-    bars: [40, 55, 30, 65, 90, 50, 70],
+    title: "Strategy Research",
+    desc: "High-fidelity backtesting engine across diversified timeframes and instruments.",
   },
   {
     icon: BarChart3,
-    tag: "Historical",
     title: "Statistical Validation",
-    desc: "Rigorous hypothesis testing, including Monte Carlo simulations and walk-forward analysis.",
-    span: "md:col-span-1",
-    footer: ["P-VAL", "T-STAT", "Z-SCORE"],
+    desc: "Robustness testing using KS, Mann-Whitney, and T-Tests to confirm edge significance.",
   },
   {
-    icon: BrainCircuit,
-    tag: "Neural",
-    title: "ML Alpha Filtering",
-    desc: "Neural networks trained to identify trade quality and filter low-probability execution signals.",
-    span: "md:col-span-1",
+    icon: Activity,
+    title: "Performance Analysis",
+    desc: "Deep dive into trade dynamics: MAE/MFE distributions and drawdown profiles.",
+  },
+  {
+    icon: Network,
+    title: "Machine Learning",
+    desc: "Feature-based model comparisons to predict trade outcomes with probabilistic precision.",
+  },
+  {
+    icon: Sparkles,
+    title: "ML-Filtered Results",
+    desc: "The unique QuantLab story: removing noise to keep only high-conviction signals.",
   },
 ];
 
-const SECONDARY_CARDS = [
+const LOOK_BEYOND_METRICS = [
+  { metric: "Forward Returns", label: "30D Proj." },
+  { metric: "Exposure", label: "MAE" },
+  { metric: "Exposure", label: "MFE" },
+  { metric: "Validity", label: "Stat Tests" },
+  { metric: "Consistency", label: "Yearly Stability" },
+  { metric: "Environment", label: "Volatility Regimes" },
+];
+
+const RISK_METRICS = [
   {
-    title: "Regime Monitoring",
-    desc: "Real-time tracking of equity curves and strategy drift relative to current market volatility regimes.",
-    meters: [
-      { label: "Drawdown Limit", value: 12.5, display: "12.5%" },
-      { label: "Stability Score", value: 82, display: "0.82" },
-    ],
+    icon: TrendingDown,
+    label: "MAE (Mean Adverse Excursion)",
+    value: "0.42%",
+    tone: "text-rose-400",
   },
   {
-    title: "Execution Engine",
-    status: "Live Status: Normal",
-    rows: [
-      { label: "Protocol", value: "FIX / FAST 4.4" },
-      { label: "Concurrency", value: "Async-IO Polling" },
-      { label: "Storage", value: "Parquet / Dask-Dist" },
-    ],
+    icon: TrendingUp,
+    label: "MFE (Mean Favorable Excursion)",
+    value: "1.84%",
+    tone: "text-emerald-400",
   },
+  {
+    icon: BarChart2,
+    label: "Forward Returns (30D Proj.)",
+    value: "+4.12%",
+    tone: "text-blue-400",
+  },
+];
+
+const MODEL_COMPARISON = [
+  { name: "Gradient Boosted Forest", acc: 84.2 },
+  { name: "Deep Neural Network", acc: 79.8 },
+  { name: "Logistic Regression (Baseline)", acc: 61.2 },
+];
+
+const FEATURE_IMPORTANCE = [
+  { name: "VIX Basis Correlation", value: 42 },
+  { name: "Skew Delta Volume", value: 28 },
+  { name: "Momentum Decay Factor", value: 18 },
+  { name: "Liquidity Fragmentation", value: 12 },
 ];
 
 const CHECKLIST = [
@@ -145,18 +210,17 @@ export default function Home() {
       {/* ----------------------------------------------------------------- */}
       <section className="mx-auto max-w-4xl px-4 pb-14 pt-14 text-center sm:px-6 sm:pt-20 lg:px-8 lg:pt-28">
         <h1 className="mt-6 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-          Quantitative Strategy Research
+          Quantitative Research.
           <br />
           <span className="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
-            &amp; ML Alpha Filtering
+            Built Around Evidence.
           </span>
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
-          Transform raw tick data and historical order flows into
-          mathematically verified alpha. Leverage high-density backtesting
-          engines and machine learning refinement to mitigate overfitting and
-          capture regime-specific edges.
+          Rigorously test strategies against granular historical data.
+          Analyze performance metrics, validate through statistical
+          inference, and refine edges with advanced ML alpha filtering.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -164,106 +228,221 @@ export default function Home() {
             to="/analysis"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
           >
-            Explore Engine <ArrowRight size={16} />
+            Launch Analysis <ArrowRight size={16} />
           </Link>
           <a
-            href="#collaboration"
+            href="#papers"
             className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/5"
           >
-            Documentation
+            <FileText size={16} /> Research Papers
           </a>
-        </div>
-
-        <div className="mt-14 grid grid-cols-2 gap-6 border-t border-white/10 pt-8 sm:grid-cols-4">
-          {HERO_STATS.map(({ value, label }) => (
-            <div key={label}>
-              <div className="text-xl font-bold text-white sm:text-2xl">
-                {value}
-              </div>
-              <div className="mt-1 text-[11px] uppercase tracking-wide text-slate-500">
-                {label}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* Core architecture                                                 */}
+      {/* Scientific workflow                                               */}
       {/* ----------------------------------------------------------------- */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <SectionEyebrow>Core Architecture</SectionEyebrow>
-        <p className="text-sm text-slate-400 sm:text-base">
-          Modular subsystems designed for institutional-grade reliability.
-        </p>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+            Scientific Workflow
+          </h2>
+        </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {ARCHITECTURE_CARDS.map(({ icon: Icon, tag, title, desc, bars, footer }) => (
+        {/* Mobile: vertical timeline */}
+        <div className="mt-10 space-y-8 md:hidden">
+          {WORKFLOW_STEPS.map((step, i) => (
+            <div key={step.num} className="relative flex gap-4">
+              {i !== WORKFLOW_STEPS.length - 1 && (
+                <span className="absolute left-4 top-9 h-[calc(100%+0.5rem)] w-px bg-white/10" />
+              )}
+              <span
+                className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                  step.active
+                    ? "bg-blue-500 text-white"
+                    : "border border-white/15 bg-white/5 text-slate-400"
+                }`}
+              >
+                {step.num}
+              </span>
+              <div className="pb-2">
+                <div className="text-sm font-semibold text-white">
+                  {step.title}
+                </div>
+                <div className="mt-0.5 text-[11px] uppercase tracking-wide text-slate-500">
+                  {step.tag}
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                  {step.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: horizontal stepper */}
+        <div className="mt-12 hidden md:block">
+          <div className="grid grid-cols-6 gap-4">
+            {WORKFLOW_STEPS.map((step, i) => (
+              <div key={step.num} className="relative text-center">
+                {i !== WORKFLOW_STEPS.length - 1 && (
+                  <span className="absolute left-1/2 top-5 h-px w-full -translate-x-0 bg-white/10" />
+                )}
+                <span
+                  className={`relative z-10 mx-auto flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold ${
+                    step.active
+                      ? "bg-blue-500 text-white"
+                      : "border border-white/15 bg-[#080b14] text-slate-400"
+                  }`}
+                >
+                  {step.num}
+                </span>
+                <div className="mt-3 text-sm font-semibold text-white">
+                  {step.title}
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-wide text-slate-500">
+                  {step.tag}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Research laboratory capabilities                                  */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <SectionEyebrow>
+            <span className="mx-auto">Research Laboratory Capabilities</span>
+          </SectionEyebrow>
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {CAPABILITIES.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
               className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
             >
-              <div className="flex items-center justify-between">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-blue-400">
-                  <Icon size={18} />
-                </span>
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  {tag}
-                </span>
-              </div>
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-blue-400">
+                <Icon size={18} />
+              </span>
               <h3 className="mt-4 text-sm font-semibold text-white">
                 {title}
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-slate-400">
                 {desc}
               </p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-              {bars && (
-                <div className="mt-5 flex h-16 items-end gap-1.5">
-                  {bars.map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-sm bg-blue-500/40"
-                      style={{ height: `${h}%` }}
-                    />
-                  ))}
-                </div>
-              )}
+      {/* ----------------------------------------------------------------- */}
+      {/* Look beyond profitability + risk metrics                          */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+            Look Beyond Profitability
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-400">
+            Traditional metrics lie. We look at the underlying mechanics of
+            every trade.
+          </p>
+        </div>
 
-              {footer && (
-                <div className="mt-6 flex gap-4 border-t border-white/10 pt-3 text-[10px] font-semibold tracking-wide text-slate-500">
-                  {footer.map((f) => (
-                    <span key={f}>{f}</span>
-                  ))}
-                </div>
-              )}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {LOOK_BEYOND_METRICS.map(({ metric, label }, i) => (
+            <div
+              key={i}
+              className="rounded-lg border border-white/10 bg-white/[0.03] p-3"
+            >
+              <div className="text-[9px] font-semibold uppercase tracking-widest text-slate-500">
+                {metric}
+              </div>
+              <div className="mt-1 text-xs font-medium text-slate-200">
+                {label}
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {/* Regime monitoring */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-blue-400">
-              <LayoutGrid size={18} />
-            </span>
-            <h3 className="mt-4 text-sm font-semibold text-white">
-              {SECONDARY_CARDS[0].title}
-            </h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              {SECONDARY_CARDS[0].desc}
-            </p>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {RISK_METRICS.map(({ icon: Icon, label, value, tone }) => (
+            <div
+              key={label}
+              className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-5"
+            >
+              <div>
+                <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                  {label}
+                </div>
+                <div className={`mt-1 text-lg font-bold ${tone}`}>
+                  {value}
+                </div>
+              </div>
+              <Icon size={20} className={tone} />
+            </div>
+          ))}
+        </div>
+      </section>
 
+      {/* ----------------------------------------------------------------- */}
+      {/* Model comparison + feature importance                             */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="flex items-center gap-2">
+              <BarChart3 size={16} className="text-blue-400" />
+              <h3 className="text-sm font-semibold text-white">
+                Model Comparison
+              </h3>
+              <span className="ml-auto text-[10px] uppercase tracking-wide text-slate-500">
+                Validation Set: 30%
+              </span>
+            </div>
             <div className="mt-5 space-y-4">
-              {SECONDARY_CARDS[0].meters.map(({ label, value, display }) => (
-                <div key={label}>
-                  <div className="mb-1.5 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>{label}</span>
-                    <span className="text-slate-300">{display}</span>
+              {MODEL_COMPARISON.map(({ name, acc }) => (
+                <div key={name}>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="text-slate-300">{name}</span>
+                    <span className="font-semibold text-white">
+                      {acc}% Acc
+                    </span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                     <div
                       className="h-full rounded-full bg-blue-500"
+                      style={{ width: `${acc}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="flex items-center gap-2">
+              <LayoutGrid size={16} className="text-blue-400" />
+              <h3 className="text-sm font-semibold text-white">
+                Neural Feature Importance
+              </h3>
+            </div>
+            <div className="mt-5 space-y-4">
+              {FEATURE_IMPORTANCE.map(({ name, value }) => (
+                <div key={name}>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="text-slate-300">{name}</span>
+                    <span className="font-semibold text-white">
+                      {value}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-indigo-400"
                       style={{ width: `${value}%` }}
                     />
                   </div>
@@ -271,29 +450,139 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Execution engine */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-white">
-                {SECONDARY_CARDS[1].title}
-              </h3>
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-emerald-400">
-                {SECONDARY_CARDS[1].status}
-              </span>
+      {/* ----------------------------------------------------------------- */}
+      {/* Alpha filtering impact                                            */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-5xl px-4 py-14 text-center sm:px-6 lg:px-8">
+        <SectionEyebrow>
+          <span className="mx-auto">Alpha Filtering Impact</span>
+        </SectionEyebrow>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-left">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Original Strategy
             </div>
-            <div className="mt-5 divide-y divide-white/10 text-xs">
-              {SECONDARY_CARDS[1].rows.map(({ label, value }) => (
+            <div className="mt-2 flex items-end gap-1.5">
+              {[40, 55, 30, 65, 90, 50, 70].map((h, i) => (
                 <div
-                  key={label}
-                  className="flex items-center justify-between py-2.5"
-                >
-                  <span className="text-slate-500">{label}</span>
-                  <span className="font-medium text-slate-300">{value}</span>
-                </div>
+                  key={i}
+                  className="w-4 rounded-sm bg-slate-600"
+                  style={{ height: `${h * 0.4}px` }}
+                />
+              ))}
+            </div>
+            <div className="mt-4 text-xl font-bold text-rose-400">
+              SR 1.2
+            </div>
+          </div>
+          <div className="rounded-xl border border-blue-500/30 bg-blue-500/[0.06] p-6 text-left">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-blue-400">
+              ML Filtered
+            </div>
+            <div className="mt-2 flex items-end gap-1.5">
+              {[60, 75, 55, 85, 100, 78, 92].map((h, i) => (
+                <div
+                  key={i}
+                  className="w-4 rounded-sm bg-blue-400"
+                  style={{ height: `${h * 0.4}px` }}
+                />
+              ))}
+            </div>
+            <div className="mt-4 text-xl font-bold text-blue-400">
+              SR 2.8
+            </div>
+          </div>
+        </div>
+
+        <p className="mx-auto mt-6 max-w-xl text-xs italic text-slate-500">
+          Neural Core filtering reduces volatility and improves Sharpe Ratio
+          by ~133%.
+        </p>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Does ML improve trade selection                                   */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-5xl px-4 py-14 text-center sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          Does ML Improve Trade Selection?
+        </h2>
+
+        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="w-full max-w-xs rounded-xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Raw Strategy
+            </div>
+            <div className="mt-2 text-3xl font-bold text-white">15</div>
+            <div className="text-[11px] uppercase tracking-wide text-slate-500">
+              Trades
+            </div>
+            <div className="mt-1 text-sm font-semibold text-slate-300">
+              66.7% Win Rate
+            </div>
+            <div className="mt-3 flex flex-wrap justify-center gap-1">
+              {Array.from({ length: 15 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-2 w-2 rounded-full ${
+                    i < 10 ? "bg-blue-500" : "bg-rose-500/70"
+                  }`}
+                />
               ))}
             </div>
           </div>
+
+          <ArrowRight size={20} className="hidden text-slate-600 sm:block" />
+
+          <div className="w-full max-w-xs rounded-xl border border-blue-500/30 bg-blue-500/[0.06] p-6">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-blue-400">
+              ML-Filtered
+            </div>
+            <div className="mt-2 text-3xl font-bold text-white">11</div>
+            <div className="text-[11px] uppercase tracking-wide text-slate-500">
+              Trades
+            </div>
+            <div className="mt-1 text-sm font-semibold text-blue-300">
+              90.9% Win Rate
+            </div>
+            <div className="mt-3 flex flex-wrap justify-center gap-1">
+              {Array.from({ length: 11 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-2 w-2 rounded-full ${
+                    i < 10 ? "bg-blue-400" : "bg-rose-500/70"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="mx-auto mt-6 max-w-xl text-xs leading-relaxed text-slate-500">
+          By identifying the statistical "dead zones" where historical
+          trades failed, the ML layer filters out 4 losing trades,
+          drastically increasing the quality of capital deployment.
+        </p>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* CTA                                                                */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          Ready to Research a Strategy?
+        </h2>
+        <div className="mt-6">
+          <Link
+            to="/analysis"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+          >
+            Launch Analysis <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 
@@ -438,7 +727,7 @@ export default function Home() {
 
           <div className="mt-5">
             <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-              Inquiry Type
+              Project Scope
             </label>
             <div className="relative">
               <select
@@ -488,7 +777,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <LayoutGrid size={14} />
-            <span>© 2026 QuantLab Research Systems</span>
+            <span>© 2026 QuantLab Systems Inc. — Lantau Island, Hong Kong Research Center</span>
           </div>
           <div className="flex gap-5 text-xs text-slate-500">
             <span>Privacy Policy</span>

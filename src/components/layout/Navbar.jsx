@@ -54,7 +54,7 @@ export default function Navbar({ action, avatar }) {
         </nav>
 
         <div className="flex items-center gap-4">
-          <LivePulse />
+          {/* <LivePulse /> */}
           {action && (
             <Link
               to={action.to}
