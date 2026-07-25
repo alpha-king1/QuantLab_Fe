@@ -120,7 +120,7 @@ const RISK_METRICS = [
     icon: BarChart2,
     label: "Forward Returns (30D Proj.)",
     value: "+4.12%",
-    tone: "text-blue-400",
+    tone: "text-amber-300",
   },
 ];
 
@@ -153,9 +153,24 @@ const CHECKLIST = [
 ];
 
 const CONTACT_CARDS = [
-  { icon: Mail, label: "Email", value: "research@quantlab.io" },
-  { icon: Code2, label: "GitHub", value: "@quantlab-dev" },
-  { icon: Users, label: "LinkedIn", value: "/in/quantlab" },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "oduyebojohn123@gmail.com",
+    href: "mailto:oduyebojohn123@gmail.com",
+  },
+  {
+    icon: Code2,
+    label: "GitHub",
+    value: "@alpha-king1",
+    href: "https://github.com/alpha-king1",
+  },
+  {
+    icon: Users,
+    label: "LinkedIn",
+    value: "/in/john-oduyebo",
+    href: "https://www.linkedin.com/in/john-oduyebo-514923213/",
+  },
 ];
 
 const INQUIRY_TYPES = [
@@ -172,8 +187,8 @@ const INQUIRY_TYPES = [
 function SectionEyebrow({ children }) {
   return (
     <div className="mb-2 flex items-center gap-2">
-      <span className="h-px w-6 bg-blue-500/70" />
-      <span className="text-xs font-semibold tracking-[0.2em] text-blue-400">
+      <span className="h-px w-6 bg-amber-400/70" />
+      <span className="text-xs font-semibold tracking-[0.2em] text-amber-300">
         {children}
       </span>
     </div>
@@ -191,18 +206,44 @@ export default function Home() {
     inquiry: INQUIRY_TYPES[0],
     brief: "",
   });
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
   const handleChange = (field) => (e) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Wire this up to your backend / mail service.
-    console.log("Inquiry submitted:", form);
+    setStatus("sending");
+
+    try {
+      const res = await fetch("https://formspree.io/f/mnjeonjv", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          projectScope: form.inquiry,
+          message: form.brief,
+        }),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", inquiry: INQUIRY_TYPES[0], brief: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-slate-200 antialiased">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
       <Navbar action={{ label: "Launch Analysis", to: "/analysis" }} />
 
       {/* ----------------------------------------------------------------- */}
@@ -212,7 +253,7 @@ export default function Home() {
         <h1 className="mt-6 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
           Quantitative Research.
           <br />
-          <span className="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-amber-300 to-yellow-100 bg-clip-text text-transparent">
             Built Around Evidence.
           </span>
         </h1>
@@ -226,7 +267,7 @@ export default function Home() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             to="/analysis"
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-500 px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400"
           >
             Launch Analysis <ArrowRight size={16} />
           </Link>
@@ -259,7 +300,7 @@ export default function Home() {
               <span
                 className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   step.active
-                    ? "bg-blue-500 text-white"
+                    ? "bg-amber-400 text-black"
                     : "border border-white/15 bg-white/5 text-slate-400"
                 }`}
               >
@@ -291,8 +332,8 @@ export default function Home() {
                 <span
                   className={`relative z-10 mx-auto flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold ${
                     step.active
-                      ? "bg-blue-500 text-white"
-                      : "border border-white/15 bg-[#080b14] text-slate-400"
+                      ? "bg-amber-400 text-black"
+                      : "border border-white/15 bg-[#0a0a0a] text-slate-400"
                   }`}
                 >
                   {step.num}
@@ -325,7 +366,7 @@ export default function Home() {
               key={title}
               className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-blue-400">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-amber-300">
                 <Icon size={18} />
               </span>
               <h3 className="mt-4 text-sm font-semibold text-white">
@@ -396,7 +437,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
             <div className="flex items-center gap-2">
-              <BarChart3 size={16} className="text-blue-400" />
+              <BarChart3 size={16} className="text-amber-300" />
               <h3 className="text-sm font-semibold text-white">
                 Model Comparison
               </h3>
@@ -415,7 +456,7 @@ export default function Home() {
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-blue-500"
+                      className="h-full rounded-full bg-amber-400"
                       style={{ width: `${acc}%` }}
                     />
                   </div>
@@ -426,7 +467,7 @@ export default function Home() {
 
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
             <div className="flex items-center gap-2">
-              <LayoutGrid size={16} className="text-blue-400" />
+              <LayoutGrid size={16} className="text-amber-300" />
               <h3 className="text-sm font-semibold text-white">
                 Neural Feature Importance
               </h3>
@@ -442,7 +483,7 @@ export default function Home() {
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-indigo-400"
+                      className="h-full rounded-full bg-yellow-300"
                       style={{ width: `${value}%` }}
                     />
                   </div>
@@ -479,20 +520,20 @@ export default function Home() {
               SR 1.2
             </div>
           </div>
-          <div className="rounded-xl border border-blue-500/30 bg-blue-500/[0.06] p-6 text-left">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-blue-400">
+          <div className="rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-6 text-left">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-amber-300">
               ML Filtered
             </div>
             <div className="mt-2 flex items-end gap-1.5">
               {[60, 75, 55, 85, 100, 78, 92].map((h, i) => (
                 <div
                   key={i}
-                  className="w-4 rounded-sm bg-blue-400"
+                  className="w-4 rounded-sm bg-amber-300"
                   style={{ height: `${h * 0.4}px` }}
                 />
               ))}
             </div>
-            <div className="mt-4 text-xl font-bold text-blue-400">
+            <div className="mt-4 text-xl font-bold text-amber-300">
               SR 2.8
             </div>
           </div>
@@ -529,7 +570,7 @@ export default function Home() {
                 <span
                   key={i}
                   className={`h-2 w-2 rounded-full ${
-                    i < 10 ? "bg-blue-500" : "bg-rose-500/70"
+                    i < 10 ? "bg-amber-400" : "bg-rose-500/70"
                   }`}
                 />
               ))}
@@ -538,15 +579,15 @@ export default function Home() {
 
           <ArrowRight size={20} className="hidden text-slate-600 sm:block" />
 
-          <div className="w-full max-w-xs rounded-xl border border-blue-500/30 bg-blue-500/[0.06] p-6">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-blue-400">
+          <div className="w-full max-w-xs rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-6">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-amber-300">
               ML-Filtered
             </div>
             <div className="mt-2 text-3xl font-bold text-white">11</div>
             <div className="text-[11px] uppercase tracking-wide text-slate-500">
               Trades
             </div>
-            <div className="mt-1 text-sm font-semibold text-blue-300">
+            <div className="mt-1 text-sm font-semibold text-amber-200">
               90.9% Win Rate
             </div>
             <div className="mt-3 flex flex-wrap justify-center gap-1">
@@ -554,7 +595,7 @@ export default function Home() {
                 <span
                   key={i}
                   className={`h-2 w-2 rounded-full ${
-                    i < 10 ? "bg-blue-400" : "bg-rose-500/70"
+                    i < 10 ? "bg-amber-300" : "bg-rose-500/70"
                   }`}
                 />
               ))}
@@ -579,7 +620,7 @@ export default function Home() {
         <div className="mt-6">
           <Link
             to="/analysis"
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-500 px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400"
           >
             Launch Analysis <ArrowRight size={16} />
           </Link>
@@ -609,7 +650,7 @@ export default function Home() {
             <ul className="mt-6 space-y-5">
               {CHECKLIST.map(({ title, desc }) => (
                 <li key={title} className="flex gap-3">
-                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-amber-300">
                     <Check size={12} strokeWidth={3} />
                   </span>
                   <div>
@@ -626,14 +667,14 @@ export default function Home() {
           </div>
 
           <div className="relative overflow-hidden rounded-xl border border-white/10">
-            <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-slate-900 via-[#0b1224] to-blue-950">
+            <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-slate-900 via-[#15100a] to-amber-950">
               <div className="grid w-4/5 grid-cols-3 gap-2">
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
                     className="flex h-24 flex-col justify-end gap-1 rounded-md border border-white/10 bg-black/30 p-2 sm:h-32"
                   >
-                    <svg viewBox="0 0 60 24" className="h-8 w-full text-blue-400">
+                    <svg viewBox="0 0 60 24" className="h-8 w-full text-amber-300">
                       <polyline
                         points="0,20 10,14 20,16 30,8 40,10 50,4 60,6"
                         fill="none"
@@ -646,7 +687,7 @@ export default function Home() {
               </div>
             </div>
             <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg bg-black/60 px-3 py-2 backdrop-blur">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/30 text-blue-300">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/30 text-amber-200">
                 <BrainCircuit size={16} />
               </span>
               <div>
@@ -654,7 +695,7 @@ export default function Home() {
                   Chief Quant Dev
                 </div>
                 <div className="text-xs font-semibold text-white">
-                  Alexander Reed
+                  John
                 </div>
               </div>
             </div>
@@ -678,19 +719,23 @@ export default function Home() {
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {CONTACT_CARDS.map(({ icon: Icon, label, value }) => (
-            <div
+          {CONTACT_CARDS.map(({ icon: Icon, label, value, href }) => (
+            <a
               key={label}
-              className="rounded-xl border border-white/10 bg-white/[0.03] p-5 text-left"
+              href={href}
+              {...(href.startsWith("mailto:")
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
+              className="group rounded-xl border border-white/10 bg-white/[0.03] p-5 text-left transition-colors hover:border-amber-400/40 hover:bg-white/[0.05]"
             >
-              <Icon size={16} className="text-blue-400" />
+              <Icon size={16} className="text-amber-300" />
               <div className="mt-3 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                 {label}
               </div>
-              <div className="mt-1 text-sm font-medium text-slate-200">
+              <div className="mt-1 text-sm font-medium text-slate-200 transition-colors group-hover:text-amber-300">
                 {value}
               </div>
-            </div>
+            </a>
           ))}
         </div>
 
@@ -708,7 +753,7 @@ export default function Home() {
                 value={form.name}
                 onChange={handleChange("name")}
                 placeholder="Full Name or Entity"
-                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-blue-500 focus:outline-none"
+                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
               />
             </div>
             <div>
@@ -720,7 +765,7 @@ export default function Home() {
                 value={form.email}
                 onChange={handleChange("email")}
                 placeholder="email@address.com"
-                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-blue-500 focus:outline-none"
+                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
               />
             </div>
           </div>
@@ -733,7 +778,7 @@ export default function Home() {
               <select
                 value={form.inquiry}
                 onChange={handleChange("inquiry")}
-                className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none"
+                className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none"
               >
                 {INQUIRY_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -757,16 +802,28 @@ export default function Home() {
               value={form.brief}
               onChange={handleChange("brief")}
               placeholder="Describe your strategy requirements or research goals..."
-              className="w-full resize-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-blue-500 focus:outline-none"
+              className="w-full resize-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
-            className="mt-6 w-full rounded-md bg-blue-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+            disabled={status === "sending"}
+            className="mt-6 w-full rounded-md bg-amber-500 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Send Transmission
+            {status === "sending" ? "Sending..." : "Send Transmission"}
           </button>
+
+          {status === "success" && (
+            <p className="mt-3 text-center text-xs font-semibold text-emerald-400">
+              Message sent — I'll get back to you shortly.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="mt-3 text-center text-xs font-semibold text-red-400">
+              Something went wrong. Please try again or email me directly.
+            </p>
+          )}
         </form>
       </section>
 

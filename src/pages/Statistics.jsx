@@ -36,7 +36,7 @@ function TestRow({ label, sub, pValue }) {
           <span
             className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
               verdict.significant
-                ? "bg-blue-500/20 text-blue-300"
+                ? "bg-amber-400/20 text-amber-200"
                 : "bg-white/10 text-slate-400"
             }`}
           >
@@ -57,8 +57,8 @@ function DistributionBox({ title, sub, data, tone }) {
   const range = max - min || 1;
   const pos = (v) => ((v - min) / range) * 100;
 
-  const barColor = tone === "danger" ? "bg-red-400/60" : "bg-blue-400/60";
-  const dotColor = tone === "danger" ? "bg-red-400" : "bg-blue-400";
+  const barColor = tone === "danger" ? "bg-red-400/60" : "bg-amber-300/60";
+  const dotColor = tone === "danger" ? "bg-red-400" : "bg-amber-300";
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
@@ -157,12 +157,12 @@ function Statistics() {
 
   if (!result) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#080b14] px-4 text-center text-slate-300">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center text-slate-300">
         <h2 className="text-xl font-bold text-white">No analysis found</h2>
         <p className="mt-2 text-sm text-slate-400">Run an analysis first.</p>
         <button
           onClick={() => navigate("/analysis")}
-          className="mt-6 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+          className="mt-6 rounded-md bg-amber-500 px-5 py-2.5 text-sm font-semibold text-black hover:bg-amber-400"
         >
           Back to Analysis
         </button>
@@ -185,14 +185,14 @@ function Statistics() {
   const filteredTests = modelFiltered?.stats?.statistical_test;
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-slate-200 antialiased">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
       <Navbar avatar />
 
       <main className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6 lg:px-8 lg:pb-12">
         {/* Header */}
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold tracking-[0.2em] text-blue-400">
+            <p className="text-xs font-semibold tracking-[0.2em] text-amber-300">
               STRATEGY ANALYSIS
             </p>
             <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
@@ -222,7 +222,7 @@ function Statistics() {
             </button>
             <button
               onClick={() => navigate("/analysis")}
-              className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-500"
+              className="flex items-center gap-2 rounded-md bg-amber-500 px-4 py-2.5 text-xs font-semibold text-black hover:bg-amber-400"
             >
               <RefreshCcw size={14} /> Run New Analysis
             </button>
@@ -241,7 +241,7 @@ function Statistics() {
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 lg:col-span-2">
             <h2 className="text-sm font-semibold text-white">Return Statistics</h2>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <Card title="Mean Return" value={pct(stat?.["10 candles forward return mean"], 3)} accent="text-blue-300" />
+              <Card title="Mean Return" value={pct(stat?.["10 candles forward return mean"], 3)} accent="text-amber-200" />
               <Card title="Median Return" value={pct(stat?.["10 candles forward return median"], 3)} />
               <Card title="Std Deviation" value={pct(stat?.["10 candles forward return std"], 2)} />
               <Card title="Skewness" value={num(stat?.["10 candles forward return skew"], 3)} />
@@ -319,7 +319,7 @@ function Statistics() {
         {filteredStat && (
           <>
             <div className="mt-8 border-t border-white/10 pt-6">
-              <span className="text-xs font-semibold tracking-[0.2em] text-blue-400">
+              <span className="text-xs font-semibold tracking-[0.2em] text-amber-300">
                 POST-ML FILTER
               </span>
               <h2 className="mt-1 text-lg font-bold text-white">Filtered Strategy Statistics</h2>
@@ -327,7 +327,7 @@ function Statistics() {
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Card title="Filtered Trades" value={filteredStat.total_trades} />
-              <Card title="Filtered Return Mean" value={pct(filteredStat["10 candles forward return mean"], 3)} accent="text-blue-300" />
+              <Card title="Filtered Return Mean" value={pct(filteredStat["10 candles forward return mean"], 3)} accent="text-amber-200" />
               <Card title="Filtered Avg Win" value={pct(filteredStat["average win"], 3)} accent="text-emerald-400" />
               <Card title="Filtered Avg Loss" value={pct(filteredStat["average_loss"], 3)} accent="text-red-400" />
             </div>
