@@ -60,7 +60,7 @@ function SelectField({ id, label, value, onChange, disabled, placeholder, option
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:opacity-50"
+        className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
       >
         <option value="">{placeholder}</option>
         {options.map((item) => (
@@ -216,24 +216,24 @@ function Analysis() {
 
   if (loadingOptions) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#080b14] text-slate-400">
+      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] text-slate-400">
         Loading QuantLab...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-slate-200 antialiased">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
       <Navbar />
 
       <main className="mx-auto max-w-3xl px-4 py-10 pb-28 sm:px-6 lg:px-8 lg:pb-16">
         {/* Header */}
         <div className="mb-8">
-          <p className="text-xs font-semibold tracking-[0.2em] text-blue-400">
+          <p className="text-xs font-semibold tracking-[0.2em] text-amber-300">
             QUANTLAB
           </p>
           <h1 className="mt-2 text-3xl font-bold leading-tight text-white sm:text-4xl">
-            Analyse a <span className="text-blue-400">Trading Strategy</span>
+            Analyse a <span className="text-amber-300">Trading Strategy</span>
           </h1>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-400">
             Configure your market data and strategy parameters to run a
@@ -293,7 +293,7 @@ function Analysis() {
                       onClick={() => setTimeframe(tf)}
                       className={`rounded-md border px-2 py-2 text-xs font-semibold uppercase transition-colors disabled:opacity-50 ${
                         timeframe === tf
-                          ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                          ? "border-amber-400 bg-amber-400/20 text-amber-200"
                           : "border-white/10 text-slate-400 hover:border-white/20"
                       }`}
                     >
@@ -307,7 +307,7 @@ function Analysis() {
                   value={timeframe}
                   onChange={(e) => setTimeframe(e.target.value)}
                   disabled={loadingAnalysis}
-                  className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:opacity-50"
+                  className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 >
                   <option value="">Select timeframe</option>
                   {timeframes.map((tf) => (
@@ -335,7 +335,7 @@ function Analysis() {
                   value={capital}
                   onChange={(e) => setCapital(e.target.value)}
                   disabled={loadingAnalysis}
-                  className="w-full rounded-md border border-white/10 bg-black/30 py-2.5 pl-7 pr-9 text-sm text-white placeholder:text-slate-600 focus:border-blue-500 focus:outline-none disabled:opacity-50"
+                  className="w-full rounded-md border border-white/10 bg-black/30 py-2.5 pl-7 pr-9 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 />
                 <Wallet
                   size={15}
@@ -355,7 +355,7 @@ function Analysis() {
                   onChange={(e) => setStartDate(e.target.value)}
                   disabled={loadingAnalysis}
                   style={{ colorScheme: "dark" }}
-                  className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:opacity-50"
+                  className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 />
                 <div className="flex items-center gap-3 py-0.5">
                   <span className="h-px flex-1 bg-white/10" />
@@ -371,7 +371,7 @@ function Analysis() {
                   onChange={(e) => setEndDate(e.target.value)}
                   disabled={loadingAnalysis}
                   style={{ colorScheme: "dark" }}
-                  className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none disabled:opacity-50"
+                  className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 />
               </div>
             </div>
@@ -389,7 +389,7 @@ function Analysis() {
             <button
               type="submit"
               disabled={loadingAnalysis}
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 py-3 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-blue-500 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-md bg-amber-500 py-3 text-sm font-bold uppercase tracking-wide text-black transition-colors hover:bg-amber-400 disabled:opacity-60"
             >
               {loadingAnalysis ? "Running Analysis..." : "Run Analysis"}
               {!loadingAnalysis && <Zap size={16} />}
@@ -445,7 +445,7 @@ function Analysis() {
                 <p className="text-slate-500">
                   [{formatTime(new Date())}]{" "}
                   {loadingAnalysis ? (
-                    <span className="text-blue-400">Analysis in progress…</span>
+                    <span className="text-amber-300">Analysis in progress…</span>
                   ) : (
                     <span className="text-slate-400">Awaiting submission</span>
                   )}

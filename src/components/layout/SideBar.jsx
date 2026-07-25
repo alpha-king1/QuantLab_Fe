@@ -8,9 +8,9 @@ import { NAV_LINKS } from "./Navbar";
  */
 export default function Sidebar() {
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-white/10 bg-[#080b14] px-4 py-6 lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-white/10 bg-[#0a0a0a] px-4 py-6 lg:flex">
       <Link to="/" className="flex items-center gap-2 px-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600/20 text-blue-400">
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/20 text-amber-300">
           <LayoutGrid size={16} />
         </span>
         <span className="text-base font-semibold tracking-tight text-white">
@@ -26,7 +26,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-white/10 text-blue-300"
+                  ? "bg-white/10 text-amber-200"
                   : "text-slate-400 hover:bg-white/5 hover:text-white"
               }`
             }
@@ -38,7 +38,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.03] px-3 py-3">
-        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-black">
           QE
         </span>
         <div className="min-w-0 flex-1">

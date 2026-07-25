@@ -111,12 +111,12 @@ function MachineLearning() {
 
   if (!result) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#080b14] px-4 text-center text-slate-300">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center text-slate-300">
         <h2 className="text-xl font-bold text-white">No analysis found</h2>
         <p className="mt-2 text-sm text-slate-400">Run an analysis first.</p>
         <button
           onClick={() => navigate("/analysis")}
-          className="mt-6 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+          className="mt-6 rounded-md bg-amber-500 px-5 py-2.5 text-sm font-semibold text-black hover:bg-amber-400"
         >
           Back to Analysis
         </button>
@@ -142,14 +142,14 @@ function MachineLearning() {
   const winRateChange = relativeChange(baselineWinloss?.["win rate"], filteredPerformance?.winloss?.["win rate"]);
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-slate-200 antialiased">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
       <Navbar avatar />
 
       <main className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6 lg:px-8 lg:pb-12">
         {/* Header */}
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold tracking-[0.2em] text-blue-400">
+            <p className="text-xs font-semibold tracking-[0.2em] text-amber-300">
               QUANTITATIVE RESEARCH / ENGINE V4.2
             </p>
             <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
@@ -211,7 +211,7 @@ function MachineLearning() {
                   <span className="truncate text-xs font-medium text-slate-300">{feature}</span>
                   <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-blue-500"
+                      className="h-full rounded-full bg-amber-400"
                       style={{ width: `${(value / maxImportance) * 100}%` }}
                     />
                   </div>
@@ -262,8 +262,8 @@ function MachineLearning() {
                 <span className="h-2 w-2 rounded-full bg-slate-500" /> Original Strategy —{" "}
                 {money(baselineEquity?.balance)}
               </span>
-              <span className="flex items-center gap-1.5 text-blue-300">
-                <span className="h-2 w-2 rounded-full bg-blue-400" /> ML Filtered —{" "}
+              <span className="flex items-center gap-1.5 text-amber-200">
+                <span className="h-2 w-2 rounded-full bg-amber-300" /> ML Filtered —{" "}
                 {money(filteredEvaluation?.balance)}
               </span>
             </div>
@@ -272,7 +272,7 @@ function MachineLearning() {
               <EquityChart
                 series={[
                   { label: "Baseline", color: "#64748b", points: baselineEquity?.equity || [] },
-                  { label: "ML Filtered", color: "#60a5fa", strokeWidth: 2.5, points: filteredEvaluation?.equity || [] },
+                  { label: "ML Filtered", color: "#fbbf24", strokeWidth: 2.5, points: filteredEvaluation?.equity || [] },
                 ]}
               />
             </div>
@@ -297,7 +297,7 @@ function MachineLearning() {
         {filteredEvaluation && (
           <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Card title="Starting Capital" value={money(filteredEvaluation.capital)} />
-            <Card title="Final Balance" value={money(filteredEvaluation.balance)} accent="text-blue-300" />
+            <Card title="Final Balance" value={money(filteredEvaluation.balance)} accent="text-amber-200" />
             <Card
               title="Return"
               value={signedPct((filteredEvaluation.balance - filteredEvaluation.capital) / filteredEvaluation.capital)}

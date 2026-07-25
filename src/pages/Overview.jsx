@@ -121,7 +121,7 @@ function RangeToggle({ range, setRange }) {
           onClick={() => setRange(r)}
           className={`rounded px-2.5 py-1 text-[11px] font-semibold transition-colors ${
             range === r
-              ? "bg-blue-600 text-white"
+              ? "bg-amber-500 text-black"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -259,12 +259,12 @@ function Overview() {
 
   if (!result) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#080b14] px-4 text-center text-slate-300">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center text-slate-300">
         <h2 className="text-xl font-bold text-white">No analysis found</h2>
         <p className="mt-2 text-sm text-slate-400">Run an analysis first.</p>
         <button
           onClick={() => navigate("/analysis")}
-          className="mt-6 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+          className="mt-6 rounded-md bg-amber-500 px-5 py-2.5 text-sm font-semibold text-black hover:bg-amber-400"
         >
           Back to Analysis
         </button>
@@ -291,7 +291,7 @@ function Overview() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-slate-200 antialiased">
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
       <Navbar avatar />
 
       <main className="mx-auto max-w-6xl px-4 py-6 pb-28 sm:px-6 lg:px-8 lg:pb-10">
@@ -348,7 +348,7 @@ function Overview() {
             <div className="mt-4 flex justify-end">
               <button
                 onClick={() => navigate("/analysis")}
-                className="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500"
+                className="rounded-md bg-amber-500 px-4 py-2 text-xs font-semibold text-black hover:bg-amber-400"
               >
                 New Analysis
               </button>
@@ -381,8 +381,8 @@ function Overview() {
                         {pct(originalWinloss?.["win rate"], 1)}
                       </div>
                     </div>
-                    <div className="rounded-md border border-blue-500 bg-blue-600/20 px-4 py-2 text-center">
-                      <div className="text-[10px] uppercase tracking-widest text-blue-300">After</div>
+                    <div className="rounded-md border border-amber-400 bg-amber-500/20 px-4 py-2 text-center">
+                      <div className="text-[10px] uppercase tracking-widest text-amber-200">After</div>
                       <div className="text-lg font-bold text-white">
                         {pct(filteredWinloss?.["win rate"], 1)}
                       </div>
@@ -418,7 +418,7 @@ function Overview() {
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-blue-500"
+                      className="h-full rounded-full bg-amber-400"
                       style={{ width: `${Math.min((profitFactorBaseline ?? 0) * 40, 100)}%` }}
                     />
                   </div>
@@ -439,8 +439,8 @@ function Overview() {
                     <span className="h-2 w-2 rounded-full bg-slate-500" /> Baseline Strategy
                   </span>
                   {modelFiltered && (
-                    <span className="flex items-center gap-1.5 text-blue-300">
-                      <span className="h-2 w-2 rounded-full bg-blue-400" /> ML Filtered
+                    <span className="flex items-center gap-1.5 text-amber-200">
+                      <span className="h-2 w-2 rounded-full bg-amber-300" /> ML Filtered
                     </span>
                   )}
                 </div>
@@ -452,7 +452,7 @@ function Overview() {
                 series={[
                   { label: "Baseline", color: "#64748b", points: filteredBaselineSeries },
                   ...(modelFiltered
-                    ? [{ label: "ML Filtered", color: "#60a5fa", strokeWidth: 2.5, points: filteredMLSeries }]
+                    ? [{ label: "ML Filtered", color: "#fbbf24", strokeWidth: 2.5, points: filteredMLSeries }]
                     : []),
                 ]}
               />
@@ -494,7 +494,7 @@ function Overview() {
                   Volatility Regime Strength
                 </span>
                 {dominantRegime && (
-                  <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-300">
+                  <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
                     {dominantRegime.vol_regime} Vol Edge Strongest
                   </span>
                 )}
@@ -508,7 +508,7 @@ function Overview() {
                       <div className="flex h-20 w-full items-end">
                         <div
                           className={`w-full rounded-t-sm ${
-                            r.mean_diff >= 0 ? "bg-blue-500/60" : "bg-red-500/50"
+                            r.mean_diff >= 0 ? "bg-amber-400/60" : "bg-red-500/50"
                           }`}
                           style={{ height: `${Math.max(heightPct, 4)}%` }}
                         />
@@ -555,9 +555,9 @@ function Overview() {
                 <span>Period Heatmap</span>
                 <span className="flex items-center gap-1.5">
                   Low Alpha
-                  <span className="h-2 w-2 rounded-full bg-blue-400/30" />
-                  <span className="h-2 w-2 rounded-full bg-blue-400/70" />
-                  <span className="h-2 w-2 rounded-full bg-blue-400" />
+                  <span className="h-2 w-2 rounded-full bg-amber-300/30" />
+                  <span className="h-2 w-2 rounded-full bg-amber-300/70" />
+                  <span className="h-2 w-2 rounded-full bg-amber-300" />
                   High Alpha
                 </span>
               </div>
@@ -590,7 +590,7 @@ function Overview() {
                         <tr key={row.label} className="border-t border-white/5">
                           <td className="px-5 py-3 text-slate-300">{row.label}</td>
                           <td className="px-5 py-3 font-mono text-slate-300">{row.format(row.base)}</td>
-                          <td className="px-5 py-3 font-mono text-blue-300">{row.format(row.filt)}</td>
+                          <td className="px-5 py-3 font-mono text-amber-200">{row.format(row.filt)}</td>
                           <td
                             className={`px-5 py-3 font-mono ${
                               variance == null ? "text-slate-500" : variance >= 0 ? "text-emerald-400" : "text-red-400"
