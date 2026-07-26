@@ -29,7 +29,7 @@ import MobileTabBar from "../components/layout/MobileTabBar";
 const WORKFLOW_STEPS = [
   {
     num: "01",
-    title: "Define",
+    title: "Define Strategy",
     tag: "Parameter Inputs",
     desc: "Hypothesis formulation and factor selection based on market anomalies.",
   },
@@ -70,12 +70,12 @@ const CAPABILITIES = [
   {
     icon: LineChart,
     title: "Strategy Research",
-    desc: "High-fidelity backtesting engine across diversified timeframes and instruments.",
+    desc: "Simulate how your strategy would have performed across years of historical market conditions.",
   },
   {
     icon: BarChart3,
     title: "Statistical Validation",
-    desc: "Robustness testing using KS, Mann-Whitney, and T-Tests to confirm edge significance.",
+    desc: "Verify whether your results are statistically significant—not just lucky outcomes.",
   },
   {
     icon: Activity,
@@ -85,11 +85,11 @@ const CAPABILITIES = [
   {
     icon: Network,
     title: "Machine Learning",
-    desc: "Feature-based model comparisons to predict trade outcomes with probabilistic precision.",
+    desc: "Use machine learning to identify the market conditions where your strategy performs best.",
   },
   {
     icon: Sparkles,
-    title: "ML-Filtered Results",
+    title: "AI-Filtered Trade Signals",
     desc: "The unique QuantLab story: removing noise to keep only high-conviction signals.",
   },
 ];
@@ -144,7 +144,7 @@ const CHECKLIST = [
   },
   {
     title: "ML Model Integration",
-    desc: "Deployment of XGBoost, LSTM, and Transformer models for signal filtering.",
+    desc: "Deployment of XGBoost, LSTM, and Transformer models for signal selection.",
   },
   {
     title: "Proprietary Research Tools",
@@ -207,12 +207,42 @@ export default function Home() {
     brief: "",
   });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [errors, setErrors] = useState({});
 
-  const handleChange = (field) => (e) =>
-    setForm((f) => ({ ...f, [field]: e.target.value }));
+  const handleChange = (field) => (e) => {
+    const val = e.target.value;
+    setForm((f) => ({ ...f, [field]: val }));
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!form.name.trim()) next.name = "Please enter your name or firm.";
+    if (!form.email.trim()) {
+      next.email = "Please enter a contact email.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      next.email = "Please enter a valid email address.";
+    }
+    if (!form.brief.trim())
+      next.brief = "Please describe your strategy requirements or research goals.";
+    return next;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      setStatus("invalid");
+      return;
+    }
+
     setStatus("sending");
 
     try {
@@ -232,6 +262,7 @@ export default function Home() {
 
       if (res.ok) {
         setStatus("success");
+        setErrors({});
         setForm({ name: "", email: "", inquiry: INQUIRY_TYPES[0], brief: "" });
       } else {
         setStatus("error");
@@ -244,7 +275,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-slate-200 antialiased">
-      <Navbar action={{ label: "Launch Analysis", to: "/analysis" }} />
+      <Navbar action={{ label: "Start Analysis", to: "/analysis" }} />
 
       {/* ----------------------------------------------------------------- */}
       {/* Hero                                                              */}
@@ -259,9 +290,7 @@ export default function Home() {
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
-          Rigorously test strategies against granular historical data.
-          Analyze performance metrics, validate through statistical
-          inference, and refine edges with advanced ML alpha filtering.
+          Test, validate, and improve quantitative trading strategies using historical market data, statistical analysis, and machine learning before risking real capital.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -269,13 +298,13 @@ export default function Home() {
             to="/analysis"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-500 px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400"
           >
-            Launch Analysis <ArrowRight size={16} />
+            Start Analysis <ArrowRight size={16} />
           </Link>
           <a
             href="#papers"
             className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/5"
           >
-            <FileText size={16} /> Research Papers
+            <FileText size={16} /> View Research
           </a>
         </div>
       </section>
@@ -386,11 +415,12 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Look Beyond Profitability
+            Evaluate More Than Returns
           </h2>
           <p className="mx-auto mt-2 max-w-xl text-sm text-slate-400">
-            Traditional metrics lie. We look at the underlying mechanics of
-            every trade.
+            Profit alone doesn't tell the full story. We evaluate risk, 
+            consistency, market conditions, and statistical quality to determine 
+            whether a strategy truly has an edge.
           </p>
         </div>
 
@@ -469,7 +499,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <LayoutGrid size={16} className="text-amber-300" />
               <h3 className="text-sm font-semibold text-white">
-                Neural Feature Importance
+                What Drives the Model's Decisions
               </h3>
             </div>
             <div className="mt-5 space-y-4">
@@ -499,7 +529,7 @@ export default function Home() {
       {/* ----------------------------------------------------------------- */}
       <section className="mx-auto max-w-5xl px-4 py-14 text-center sm:px-6 lg:px-8">
         <SectionEyebrow>
-          <span className="mx-auto">Alpha Filtering Impact</span>
+          <span className="mx-auto">Alpha Signal Selection Impact</span>
         </SectionEyebrow>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -540,8 +570,8 @@ export default function Home() {
         </div>
 
         <p className="mx-auto mt-6 max-w-xl text-xs italic text-slate-500">
-          Neural Core filtering reduces volatility and improves Sharpe Ratio
-          by ~133%.
+          Machine learning removes lower-quality trade opportunities, increasing 
+          consistency while improving the strategy's risk-adjusted returns.
         </p>
       </section>
 
@@ -604,9 +634,9 @@ export default function Home() {
         </div>
 
         <p className="mx-auto mt-6 max-w-xl text-xs leading-relaxed text-slate-500">
-          By identifying the statistical "dead zones" where historical
-          trades failed, the ML layer filters out 4 losing trades,
-          drastically increasing the quality of capital deployment.
+          Rather than taking every trade, the ML model filters out 
+          lower-probability setups, increasing win rate while 
+          reducing unnecessary exposure.
         </p>
       </section>
 
@@ -615,14 +645,14 @@ export default function Home() {
       {/* ----------------------------------------------------------------- */}
       <section className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-white sm:text-3xl">
-          Ready to Research a Strategy?
+          Have a Trading Strategy You Want to Validate?
         </h2>
         <div className="mt-6">
           <Link
             to="/analysis"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-500 px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400"
           >
-            Launch Analysis <ArrowRight size={16} />
+            Start Analysis <ArrowRight size={16} />
           </Link>
         </div>
       </section>
@@ -642,9 +672,10 @@ export default function Home() {
               Trading Ecosystem
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-400">
-              As a specialized quantitative developer, I offer end-to-end
-              strategy engineering — from low-latency data pipelines to
-              sophisticated ML-driven alpha discovery modules.
+              Need a Custom Quant Research Platform?
+              I design bespoke research infrastructure for traders, hedge funds, 
+              and quantitative teams from backtesting engines to AI-powered signal 
+              analysis.
             </p>
 
             <ul className="mt-6 space-y-5">
@@ -711,7 +742,7 @@ export default function Home() {
         className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 lg:px-8"
       >
         <h2 className="text-2xl font-bold text-white sm:text-3xl">
-          Initiate Collaboration
+          Let's Build Together
         </h2>
         <p className="mt-3 text-sm text-slate-400">
           Have a specific strategy or research bottleneck? Let's engineer a
@@ -746,27 +777,41 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                Name / Firm
+                Name / Firm <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={form.name}
                 onChange={handleChange("name")}
                 placeholder="Full Name or Entity"
-                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
+                className={`w-full rounded-md border bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none ${
+                  errors.name
+                    ? "border-red-500/60 focus:border-red-500"
+                    : "border-white/10 focus:border-amber-400"
+                }`}
               />
+              {errors.name && (
+                <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>
+              )}
             </div>
             <div>
               <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                Contact Email
+                Contact Email <span className="text-red-400">*</span>
               </label>
               <input
                 type="email"
                 value={form.email}
                 onChange={handleChange("email")}
                 placeholder="email@address.com"
-                className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
+                className={`w-full rounded-md border bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none ${
+                  errors.email
+                    ? "border-red-500/60 focus:border-red-500"
+                    : "border-white/10 focus:border-amber-400"
+                }`}
               />
+              {errors.email && (
+                <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>
+              )}
             </div>
           </div>
 
@@ -795,15 +840,22 @@ export default function Home() {
 
           <div className="mt-5">
             <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-              Project Brief
+              Project Brief <span className="text-red-400">*</span>
             </label>
             <textarea
               rows={4}
               value={form.brief}
               onChange={handleChange("brief")}
               placeholder="Describe your strategy requirements or research goals..."
-              className="w-full resize-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
+              className={`w-full resize-none rounded-md border bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none ${
+                errors.brief
+                  ? "border-red-500/60 focus:border-red-500"
+                  : "border-white/10 focus:border-amber-400"
+              }`}
             />
+            {errors.brief && (
+              <p className="mt-1.5 text-xs text-red-400">{errors.brief}</p>
+            )}
           </div>
 
           <button
@@ -811,7 +863,7 @@ export default function Home() {
             disabled={status === "sending"}
             className="mt-6 w-full rounded-md bg-amber-500 py-3 text-sm font-semibold text-black transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {status === "sending" ? "Sending..." : "Send Transmission"}
+            {status === "sending" ? "Sending..." : "Send Message"}
           </button>
 
           {status === "success" && (
@@ -824,6 +876,11 @@ export default function Home() {
               Something went wrong. Please try again or email me directly.
             </p>
           )}
+          {status === "invalid" && (
+            <p className="mt-3 text-center text-xs font-semibold text-red-400">
+              Please fill in the required fields above before sending.
+            </p>
+          )}
         </form>
       </section>
 
@@ -834,7 +891,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <LayoutGrid size={14} />
-            <span>© 2026 QuantLab Systems Inc. — Lantau Island, Hong Kong Research Center</span>
+            <span>© 2026 QuantLab Systems Inc.</span>
           </div>
           <div className="flex gap-5 text-xs text-slate-500">
             <span>Privacy Policy</span>
