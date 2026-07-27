@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowLeft, Download, TrendingUp, TrendingDown, Info } from "lucide-react";
 import Navbar from "../components/layout/Navbar";
 import MobileTabBar from "../components/layout/MobileTabBar";
 import EquityChart from "../components/charts/EquityChart";
@@ -20,11 +20,32 @@ import {
 /*  Building blocks                                                           */
 /* -------------------------------------------------------------------------- */
 
-function Card({ title, value, sub, accent }) {
+// Small "?" style info icon — hover on desktop, tap-to-focus on mobile —
+// used to explain what a metric means in plain language.
+function InfoTip({ text }) {
+  return (
+    <span className="group relative ml-1 inline-flex align-middle">
+      <button
+        type="button"
+        tabIndex={0}
+        aria-label="More info"
+        className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-slate-500 transition-colors hover:text-amber-300 focus:text-amber-300 focus:outline-none"
+      >
+        <Info size={12} />
+      </button>
+      <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-md border border-white/10 bg-[#0a0a0a] px-2.5 py-2 text-[11px] font-normal normal-case leading-relaxed text-slate-300 opacity-0 shadow-lg shadow-black/50 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+        {text}
+      </span>
+    </span>
+  );
+}
+
+function Card({ title, value, sub, accent, info }) {
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-      <div className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+      <div className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
         {title}
+        {info && <InfoTip text={info} />}
       </div>
       <div className={`mt-2 text-xl font-bold ${accent ?? "text-white"}`}>
         {value ?? "N/A"}
@@ -34,13 +55,14 @@ function Card({ title, value, sub, accent }) {
   );
 }
 
-function DeltaCard({ title, baseValue, filteredValue, decimals = 2, invertGood = false }) {
+function DeltaCard({ title, baseValue, filteredValue, decimals = 2, invertGood = false, info }) {
   const change = relativeChange(baseValue, filteredValue);
   const improved = change == null ? null : invertGood ? change < 0 : change > 0;
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-      <div className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+      <div className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
         {title}
+        {info && <InfoTip text={info} />}
       </div>
       <div className="mt-2 flex items-end gap-2">
         <span className="text-2xl font-bold text-white">
@@ -171,17 +193,45 @@ function MachineLearning() {
         {/* Model performance matrix — only if your backend returns model_stats */}
         {modelStats.length > 0 && (
           <div className="mb-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
-            <h2 className="p-5 pb-0 text-sm font-semibold text-white">Model Comparison</h2>
+            <h2 className="flex items-center p-5 pb-0 text-sm font-semibold text-white">
+              Model Comparison
+              <InfoTip text="How well each model predicted whether a trade would be a winner or a loser, tested on data it hadn't seen before." />
+            </h2>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-t border-white/10 text-[10px] uppercase tracking-widest text-slate-500">
                     <th className="px-5 py-3 font-semibold">Model</th>
-                    <th className="px-5 py-3 font-semibold">Accuracy</th>
-                    <th className="px-5 py-3 font-semibold">Precision</th>
-                    <th className="px-5 py-3 font-semibold">Recall</th>
-                    <th className="px-5 py-3 font-semibold">F1</th>
-                    <th className="px-5 py-3 font-semibold">AUC-ROC</th>
+                    <th className="px-5 py-3 font-semibold">
+                      <span className="inline-flex items-center">
+                        Accuracy
+                        <InfoTip text="The percentage of predictions the model got right overall." />
+                      </span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold">
+                      <span className="inline-flex items-center">
+                        Precision
+                        <InfoTip text="Of the trades the model flagged as 'good', how many actually turned out to be good." />
+                      </span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold">
+                      <span className="inline-flex items-center">
+                        Recall
+                        <InfoTip text="Of all the trades that were actually good, how many the model successfully caught." />
+                      </span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold">
+                      <span className="inline-flex items-center">
+                        F1
+                        <InfoTip text="A single score balancing Precision and Recall — useful when both false alarms and missed opportunities matter." />
+                      </span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold">
+                      <span className="inline-flex items-center">
+                        AUC-ROC
+                        <InfoTip text="How well the model separates good trades from bad ones overall. 1.0 is a perfect model, 0.5 is a random guess." />
+                      </span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -204,7 +254,10 @@ function MachineLearning() {
         {/* Feature importance */}
         {sortedImportance.length > 0 && (
           <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <h2 className="text-sm font-semibold text-white">Feature Importance</h2>
+            <h2 className="flex items-center text-sm font-semibold text-white">
+              Feature Importance
+              <InfoTip text="Shows which market signals the model relied on most when deciding whether to trust a trade. Longer bars mean the model leaned on that signal more heavily." />
+            </h2>
             <div className="mt-4 space-y-3">
               {sortedImportance.map(([feature, value]) => (
                 <div key={feature} className="grid grid-cols-[120px_1fr_60px] items-center gap-3 sm:grid-cols-[160px_1fr_70px]">
@@ -225,15 +278,19 @@ function MachineLearning() {
         {/* Alpha filtering impact */}
         {modelFiltered && (
           <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <h2 className="text-sm font-semibold text-white">Alpha Filtering Impact</h2>
+            <h2 className="flex items-center text-sm font-semibold text-white">
+              Alpha Filtering Impact
+              <InfoTip text="Compares how the strategy performed on its own versus after the ML model filtered out the trades it considered low-quality." />
+            </h2>
             <p className="mt-1 text-xs text-slate-400">
               Comparing original strategy equity against ML-filtered execution.
             </p>
 
             <div className="mt-4 flex flex-wrap gap-6">
               <div>
-                <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                <div className="flex items-center text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                   Filtered Trades
+                  <InfoTip text="How many trades remained after the ML model removed the ones it judged likely to lose." />
                 </div>
                 <div className="mt-1 flex items-baseline gap-2">
                   <span className="text-xl font-bold text-white">{filteredStats?.total_trades ?? "—"}</span>
@@ -243,8 +300,9 @@ function MachineLearning() {
                 </div>
               </div>
               <div>
-                <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                <div className="flex items-center text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                   Adjusted Win Rate
+                  <InfoTip text="The win rate after removing the trades the ML model flagged as likely losers." />
                 </div>
                 <div className="mt-1 flex items-baseline gap-2">
                   <span className="text-xl font-bold text-white">
@@ -278,14 +336,27 @@ function MachineLearning() {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <DeltaCard title="Return / Risk Ratio*" baseValue={rrBase} filteredValue={rrFiltered} decimals={2} />
+              <DeltaCard
+                title="Return / Risk Ratio*"
+                baseValue={rrBase}
+                filteredValue={rrFiltered}
+                decimals={2}
+                info="How much return you got for the risk taken — higher means more reward for each unit of risk. (A simplified measure, not a full annualized Sharpe ratio.)"
+              />
               <DeltaCard
                 title="Max Drawdown"
                 baseValue={maxDDBase != null ? maxDDBase * 100 : null}
                 filteredValue={maxDDFiltered != null ? maxDDFiltered * 100 : null}
                 decimals={1}
+                info="The biggest drop from a peak to a low point in the account balance. A measure of the worst-case pain you'd have felt holding this strategy."
               />
-              <DeltaCard title="Profit Factor" baseValue={pfBase} filteredValue={pfFiltered} decimals={2} />
+              <DeltaCard
+                title="Profit Factor"
+                baseValue={pfBase}
+                filteredValue={pfFiltered}
+                decimals={2}
+                info="How much money was made for every dollar lost. Above 1 means the strategy was profitable overall; higher is better."
+              />
             </div>
             <p className="mt-2 text-[10px] text-slate-600">
               *Simplified mean/std of forward returns — not an annualized, risk-free-adjusted Sharpe ratio.
@@ -296,12 +367,22 @@ function MachineLearning() {
         {/* Filtered equity summary */}
         {filteredEvaluation && (
           <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <Card title="Starting Capital" value={money(filteredEvaluation.capital)} />
-            <Card title="Final Balance" value={money(filteredEvaluation.balance)} accent="text-amber-200" />
+            <Card
+              title="Starting Capital"
+              value={money(filteredEvaluation.capital)}
+              info="The amount of money you started with in this simulation."
+            />
+            <Card
+              title="Final Balance"
+              value={money(filteredEvaluation.balance)}
+              accent="text-amber-200"
+              info="What your account would be worth at the end of the test period, after all filtered trades."
+            />
             <Card
               title="Return"
               value={signedPct((filteredEvaluation.balance - filteredEvaluation.capital) / filteredEvaluation.capital)}
               accent="text-emerald-400"
+              info="The overall percentage gain or loss compared to your starting capital."
             />
           </div>
         )}

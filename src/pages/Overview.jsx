@@ -6,6 +6,7 @@ import {
   TrendingUp,
   TrendingDown,
   Wallet,
+  Info,
 } from "lucide-react";
 import Navbar from "../components/layout/Navbar";
 import MobileTabBar from "../components/layout/MobileTabBar";
@@ -95,12 +96,31 @@ function filterByRange(equity, range) {
 /*  Small building blocks                                                     */
 /* -------------------------------------------------------------------------- */
 
-function Card({ title, value, icon: Icon, accent, sub }) {
+function InfoTip({ text }) {
+  return (
+    <span className="group relative ml-1 inline-flex align-middle">
+      <button
+        type="button"
+        tabIndex={0}
+        aria-label="More info"
+        className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-slate-500 transition-colors hover:text-amber-300 focus:text-amber-300 focus:outline-none"
+      >
+        <Info size={12} />
+      </button>
+      <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-md border border-white/10 bg-[#0a0a0a] px-2.5 py-2 text-[11px] font-normal normal-case leading-relaxed text-slate-300 opacity-0 shadow-lg shadow-black/50 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+        {text}
+      </span>
+    </span>
+  );
+}
+
+function Card({ title, value, icon: Icon, accent, sub, info }) {
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
       <div className="flex items-start justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+        <span className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
           {title}
+          {info && <InfoTip text={info} />}
         </span>
         {Icon && <Icon size={16} className={accent ?? "text-slate-500"} />}
       </div>
@@ -359,8 +379,9 @@ function Overview() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             {modelFiltered && (
               <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 lg:col-span-2">
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                <span className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
                   Alpha Impact Report
+                  <InfoTip text="Shows how filtering trades with the ML model changed your win rate compared to the original strategy." />
                 </span>
                 <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
                   <div>
@@ -393,13 +414,17 @@ function Overview() {
             )}
 
             <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+              <span className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
                 Risk Profile
+                <InfoTip text="Key risk indicators for this strategy — how much you could lose along the way, and how efficiently it makes money relative to losses." />
               </span>
               <div className="mt-4 space-y-4">
                 <div>
                   <div className="mb-1.5 flex justify-between text-xs">
-                    <span className="text-slate-400">Max Drawdown</span>
+                    <span className="flex items-center text-slate-400">
+                      Max Drawdown
+                      <InfoTip text="The biggest drop from a peak to a low point in your account balance during the test period — the worst-case pain of holding this strategy." />
+                    </span>
                     <span className="font-semibold text-red-400">{signedPct(maxDDBaseline)}</span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
@@ -411,7 +436,10 @@ function Overview() {
                 </div>
                 <div>
                   <div className="mb-1.5 flex justify-between text-xs">
-                    <span className="text-slate-400">Profit Factor</span>
+                    <span className="flex items-center text-slate-400">
+                      Profit Factor
+                      <InfoTip text="How much money was made for every dollar lost. Above 1 means the strategy was profitable overall — higher is better." />
+                    </span>
                     <span className="font-semibold text-slate-200">
                       {profitFactorBaseline ? profitFactorBaseline.toFixed(2) : "—"}
                     </span>
@@ -461,23 +489,30 @@ function Overview() {
 
           {/* Quick stat cards */}
           <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <Card title="Total Trades" value={originalStats?.total_trades} />
+            <Card
+              title="Total Trades"
+              value={originalStats?.total_trades}
+              info="The number of trades this strategy would have placed during the test period."
+            />
             <Card
               title="Avg Win"
               value={money((originalStats?.["average win"] ?? 0) * (tradeEvaluation?.capital ?? 0))}
               icon={TrendingUp}
               accent="text-emerald-400"
+              info="The average amount gained on trades that were profitable."
             />
             <Card
               title="Avg Loss"
               value={money((originalStats?.["average_loss"] ?? 0) * (tradeEvaluation?.capital ?? 0))}
               icon={TrendingDown}
               accent="text-red-400"
+              info="The average amount lost on trades that weren't profitable."
             />
             <Card
               title="Net Liquidation Value"
               value={money(tradeEvaluation?.balance)}
               icon={Wallet}
+              info="What your account would be worth if you cashed out today — starting capital plus total gains and losses."
               sub={
                 tradeEvaluation
                   ? `${signedPct((tradeEvaluation.balance - tradeEvaluation.capital) / tradeEvaluation.capital)} ROA`
@@ -490,8 +525,9 @@ function Overview() {
           {volRegime && (
             <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-5">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                <span className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
                   Volatility Regime Strength
+                  <InfoTip text="Shows which market conditions — calm or turbulent — this strategy performed best in." />
                 </span>
                 {dominantRegime && (
                   <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
@@ -526,8 +562,9 @@ function Overview() {
           {/* Yearly stability map */}
           {yearlyStability && yearlyStability.length > 0 && (
             <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-5">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+              <span className="flex items-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
                 Yearly Stability Map
+                <InfoTip text="A year-by-year heatmap showing whether this strategy's edge held up consistently over time, or was inconsistent." />
               </span>
               <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-5">
                 {(() => {
@@ -568,8 +605,9 @@ function Overview() {
           {modelFiltered && (
             <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
               <div className="p-5 pb-0">
-                <h2 className="text-sm font-semibold text-white sm:text-base">
+                <h2 className="flex items-center text-sm font-semibold text-white sm:text-base">
                   Strategy Breakdown: Performance vs. ML Layer
+                  <InfoTip text="A side-by-side comparison of the original strategy's key metrics against the same metrics after ML filtering was applied." />
                 </h2>
               </div>
               <div className="mt-4 overflow-x-auto">
@@ -579,7 +617,12 @@ function Overview() {
                       <th className="px-5 py-3 font-semibold">Metric</th>
                       <th className="px-5 py-3 font-semibold">Baseline</th>
                       <th className="px-5 py-3 font-semibold">ML Filtered</th>
-                      <th className="px-5 py-3 font-semibold">Variance</th>
+                      <th className="px-5 py-3 font-semibold">
+                        <span className="inline-flex items-center">
+                          Variance
+                          <InfoTip text="The percentage change between the baseline result and the ML-filtered result." />
+                        </span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

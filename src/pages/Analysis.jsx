@@ -39,6 +39,25 @@ function formatTime(date) {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
+// Latest date a user is allowed to pick — yesterday, in the browser's local
+// time zone, formatted as YYYY-MM-DD for use as an <input type="date"> value/max.
+function getMaxSelectableDate() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// Whichever comes first out of "start + 3 months" vs "end", tells us
+// whether the selected window meets the minimum 3-month requirement.
+function isAtLeastThreeMonthsApart(startDate, endDate) {
+  const minEnd = new Date(startDate);
+  minEnd.setMonth(minEnd.getMonth() + 3);
+  return new Date(endDate) >= minEnd;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Small building blocks                                                     */
 /* -------------------------------------------------------------------------- */
@@ -62,9 +81,15 @@ function SelectField({ id, label, value, onChange, disabled, placeholder, option
         disabled={disabled}
         className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
       >
-        <option value="">{placeholder}</option>
+        <option value="" style={{ backgroundColor: "#0a0a0a", color: "#e2e8f0" }}>
+          {placeholder}
+        </option>
         {options.map((item) => (
-          <option key={getKey(item)} value={getValue(item)}>
+          <option
+            key={getKey(item)}
+            value={getValue(item)}
+            style={{ backgroundColor: "#0a0a0a", color: "#e2e8f0" }}
+          >
             {getLabel(item)}
           </option>
         ))}
@@ -153,8 +178,23 @@ function Analysis() {
       return;
     }
 
-    if (new Date(startDate) >= new Date(endDate)) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (start >= today || end >= today) {
+      setError("Start and end dates must be before today — future or same-day dates aren't supported for a backtest.");
+      return;
+    }
+
+    if (start >= end) {
       setError("Start date must be before end date.");
+      return;
+    }
+
+    if (!isAtLeastThreeMonthsApart(start, end)) {
+      setError("Please increase the time difference between your start and end date — a backtest window needs to span at least 3 months.");
       return;
     }
 
@@ -209,6 +249,8 @@ function Analysis() {
     () => estimateCandleCount(startDate, endDate, timeframe),
     [startDate, endDate, timeframe]
   );
+
+  const maxSelectableDate = useMemo(() => getMaxSelectableDate(), []);
 
   // Only offer the segmented-button layout when there's a small, sane number
   // of timeframe options — otherwise fall back to a normal dropdown.
@@ -309,9 +351,15 @@ function Analysis() {
                   disabled={loadingAnalysis}
                   className="w-full appearance-none rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 >
-                  <option value="">Select timeframe</option>
+                  <option value="" style={{ backgroundColor: "#0a0a0a", color: "#e2e8f0" }}>
+                    Select timeframe
+                  </option>
                   {timeframes.map((tf) => (
-                    <option key={tf} value={tf}>
+                    <option
+                      key={tf}
+                      value={tf}
+                      style={{ backgroundColor: "#0a0a0a", color: "#e2e8f0" }}
+                    >
                       {tf}
                     </option>
                   ))}
@@ -354,6 +402,7 @@ function Analysis() {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   disabled={loadingAnalysis}
+                  max={maxSelectableDate}
                   style={{ colorScheme: "dark" }}
                   className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 />
@@ -370,10 +419,15 @@ function Analysis() {
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   disabled={loadingAnalysis}
+                  max={maxSelectableDate}
                   style={{ colorScheme: "dark" }}
                   className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none disabled:opacity-50"
                 />
               </div>
+              <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
+                Both dates must fall before today, with the window spanning at
+                least 3 months.
+              </p>
             </div>
 
             {estimatedCandles !== null && (
